@@ -1,0 +1,145 @@
+<html>
+<head>
+    <title>#(_res.get("hello"))</title>
+    <link rel="stylesheet" href="./static/lib/dataTables/jquery.dataTables.css">
+</head>
+<body>
+<a class="changeLang" href="javascript:void(0);">english</a><br/>
+<a class="changeLang" href="javascript:void(0);">中文</a><br/>
+#(ctx)<br/>
+#(basePath)<br/>
+#(_res.get("msg"))666<br/>
+#(_res.format("msg","aaa","bbb")) 7777<br/>
+
+<br/><br/>
+
+<a href="login">登陆页</a>
+<h1>这里是我们的首页！！！</h1><br/>
+<a href="logout">退出</a><br/><br/>
+<a href="toUserEdit">修改用户测试</a>
+<br/><br/><br/>
+<button id="show">弹出提示</button>
+<div>
+    <table id="user_table">
+        <thead>
+        <tr>
+            <th>#(_res.get("userid"))</th>
+            <th>#(_res.get("login_name"))</th>
+            <th>#(_res.get("user_group"))</th>
+            <th>#(_res.get("username"))</th>
+        </tr>
+        </thead>
+        <tbody id="user_table_body"></tbody>
+    </table>
+</div>
+</body>
+<script type="text/javascript" src="./static/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="./static/lib/dataTables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="./static/lib/jquery.i18n/jquery.i18n.properties.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var arrStr = document.cookie.split("; ");
+        var lan;
+        for (var i = 0; i < arrStr.length; i++) {
+            var temp = arrStr[i].split("=");
+            if (temp[0] == '_locale') {
+                lan = unescape(temp[1]);
+            }
+        }
+        initTable(lan);
+        initI18n(lan);
+        $("#show").click(function () {
+            var ok = jQuery.i18n.prop('ok', "张三");
+            alert(ok + "LLLLLLLLLLLLl");
+
+        })
+
+        function initTable(lang) {
+            var _locale = lang == undefined || lang == '' ? 'en_US' : lang;
+            var dutyTable = $("#user_table").dataTable({
+                "oLanguage": {
+                    "sUrl": 'static/lib/dataTables/i18n/language_' + _locale + '.json'
+                },
+                "destroy": true,       //销毁表格对象
+                "aLengthMenu": [5, 10],  //用户可自选每页展示数量 5条或10条
+                "searching": false,//禁用搜索（搜索框）
+                "lengthChange": true,
+                "paging": true,//开启表格分页
+                "bProcessing": true,
+                "bServerSide": true,
+                "bAutoWidth": false,
+                "iscrollY": 50,
+                "deferRender": true,//延迟渲染
+                "iDisplayLength": 5,
+                "iDisplayStart": 0,
+                "select": {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
+                "ordering": false,//全局禁用排序
+                "ajax": {  //ajax方式向后台发送请求
+                    "type": "POST",
+                    "url": "user/query",
+                    // "data":{dutyUserId:uid},//传递的数据
+                    "dataType": "json",
+                    "dataFilter": function (json) {//json是服务器端返回的数据
+                        json = JSON.parse(json);
+                        var returnData = {};
+                        // returnData.draw = json.data.draw;
+                        returnData.recordsTotal = json.totalRow;
+                        returnData.recordsFiltered = json.totalRow;//后台不实现过滤功能，每次查询均视作全部结果
+                        returnData.data = json.list;
+                        return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                    }
+                },
+                "columns": [//对接收到的json格式数据进行处理，data为json中对应的key
+                    {"data": "USER_ID"},
+                    {"data": "USERNAME"},
+                    {"data": "GROUP_ID"},
+                    {"data": "USER_DESC"}
+                ]
+
+            });
+        }
+
+        $(".changeLang").on("click", function () {
+            switch ($(this).text()) {
+                case "中文": {
+                    window.location.href = "index?_locale=zh_CN";
+                    break;
+                }
+                case "english": {
+                    window.location.href = "index?_locale=en_US";
+                    break;
+                }
+            }
+        })
+
+        function initI18n(lang) {
+            $.i18n.properties({
+                name: 'i18n',
+                path: 'static/lang/',
+                mode: 'map', // both , map
+                language: lang == undefined || lang == '' ? 'en_US' : lang,
+                checkAvailableLanguages: true,
+                async: true,
+                callback: function () {
+                    // 我们指定的模式: 'both' ，所以翻译的值会将作为JS的变量/方法和一个map
+
+                    //通过map访问一个简单的值
+                    // jQuery.i18n.prop('ok');
+
+                    // 通过map访问带占位符的值
+                    //var aa = jQuery.i18n.prop('ok', 'John');
+
+                    // 通过JS变量访问一个简单的值
+                    // alert(aa);
+                    // 通过JS函数访问带占位符的值
+                    // alert(ok('张盛'));
+                }
+            });
+        }
+    })
+</script>
+
+</html>

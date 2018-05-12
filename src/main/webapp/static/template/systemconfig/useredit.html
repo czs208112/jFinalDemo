@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改用户</title>
+</head>
+<body>
+
+<p>增加用户</p>
+<form action="user/add" method="post">
+    登录名:<input name="sysUserModel.username" value="zhangsan"><br/>
+    用户组:<input name="sysUserModel.group_id" value="g111000"><br/>
+    密码:<input name="sysUserModel.password" value="111111"><br/>
+    用户名称:<input name="sysUserModel.user_desc" value="张三"><br/>
+    头像:<input name="sysUserModel.img" value="张三"><br/>
+    <input type="submit" value="确定">
+</form>
+
+<p>修改用户</p>
+<form action="user/edit" method="post">
+    id:<input name="sysUserModel.user_id" value="112233"><br/>
+    登录名:<input name="sysUserModel.username" value="zhangsan"><br/>
+    用户组:<input name="sysUserModel.group_id" value="g111000"><br/>
+    用户名称:<input name="sysUserModel.user_desc" value="张三"><br/>
+    头像:<input name="sysUserModel.img" value="aaa.png"><br/>
+    <input type="submit" value="确定">
+</form>
+
+<p>删除用户</p>
+<form action="user/del" method="post">
+    id:<input name="sysUserModel.user_id" value="112233"><br/>
+    <input type="submit" value="确定">
+</form>
+
+</body>
+
+<script type="text/javascript">
+
+    // $(function () {
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "some.php",
+    //         dataType: "json",
+    //         data: "name=John&location=Boston",
+    //         success: function (msg) {
+    //             alert("Data Saved: " + msg);
+    //         }
+    //     });
+    // })
+
+</script>
+</html>

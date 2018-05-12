@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>登陆</h1>
+
+<div>
+    <form method="post" action="doLogin">
+        账号：<input name="username" id="username"><br/>
+        密码：<input name="password" id="password"><br/>
+        <input name="captchaCode" placeholder="验证码">
+        <img src="captcha" onclick="this.src = 'captcha?v=' + Math.random()"/>
+        <br/>
+        <button type="submit" id="login_button">登陆</button>
+    </form>
+</div>
+
+</body>
+</html>
